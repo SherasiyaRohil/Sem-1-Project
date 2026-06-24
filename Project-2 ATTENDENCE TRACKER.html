@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Attendance</title>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+            background-color:bisque;
+    
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 70%;
+            background-color:lightblue;
+            
+        }
+
+        td {
+            padding: 8px;
+            border: 1px solid #070707;
+            text-align: center;
+        }
+
+        .status {
+            font-weight: bold;
+            padding-left: 10px;
+            margin: 10px;
+            padding: 10px 20px;
+            color: red;
+
+        }
+
+        button {
+            margin: 10px 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+            bottom: 10px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        
+    </style>
+</head>
+
+<body>
+
+    <h2>Student Attendance Tracer</h2>
+    <button onclick="Present()">All Present</button>
+    <button onclick="resetAll()">Reset</button>
+    <button onclick="submitAttendance()">Submit</button>
+
+    <br><br>
+
+    <table id="studentTable"></table>
+
+    <p id="absentList"></p>
+
+    <script>
+        let student = [];
+
+
+        for (let i = 301; i <= 427; i++) {
+            student.push({ rollno: i });
+        }
+
+
+        for (let i = 501; i <= 546; i++) {
+            student.push({ rollno: i });
+        }
+
+
+        let table = document.getElementById("studentTable");
+        student.forEach((stu, i) => {
+            let row = table.insertRow();
+            row.innerHTML = `
+            
+        <td>${stu.rollno}</td>
+        <td><input type="checkbox" id="che${i}" checked></td>
+        <td class="status" id="status${i}">Present</td>
+    `;
+        });
+
+
+        function Present() {
+            student.forEach((_, i) => {
+                document.getElementById(`che${i}`).checked = true;
+                document.getElementById(`status${i}`).innerText = "Present";
+                document.getElementById(`status${i}`).style.color = "green";
+            });
+            document.getElementById("absentList").innerText = "";
+        }
+
+
+        function resetAll() {
+            student.forEach((_, i) => {
+                document.getElementById(`che${i}`).checked = false;
+                document.getElementById(`status${i}`).innerText = "--";
+                document.getElementById(`status${i}`).style.color = "black";
+            });
+            document.getElementById("absentList").innerText = "";
+        }
+
+        function submitAttendance() {
+            let absentRollnos = [];
+            student.forEach((stu, i) => {
+                let checkbox = document.getElementById(`che${i}`);
+                let status = document.getElementById(`status${i}`);
+                if (checkbox.checked) {
+                    status.innerText = "Present";
+                    status.style.color = "green";
+                } else {
+                    status.innerText = "Absent";
+                    status.style.color = "red";
+                    absentRollnos.push(stu.rollno);
+                }
+            });
+
+            if (absentRollnos.length > 0) {
+                document.getElementById("absentList").innerText =
+                    "Absent Roll Numbers: " + absentRollnos.join(", ");
+            } else {
+                document.getElementById("absentList").innerText = "All Students are Present.";
+            }
+        }
+    </script>
+
+</body>
+
+</html>
